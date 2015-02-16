@@ -1,0 +1,8 @@
+{
+  "name": "myColors",
+  "version": "0.0.1",
+  "dependancies": {},
+  "dependencies": {
+    "colors": "^1.0.3"
+  }
+}
