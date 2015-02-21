@@ -1,0 +1,14 @@
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://ist-aanders3-2072.advancemags.com:8001');
+  socket.on('news', function (data) {
+    console.log(data);
+    socket.emit('my other event', { my: 'data' });
+  });
+  socket.on('message', function(data) {
+  	console.log(data);
+  });
+  socket.on('time', function(data){
+  	console.log(data);
+  });
+</script>
