@@ -6,6 +6,10 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var logger = require("./logger");
 
+var mongo = require('mongodb');
+var monk = require('monk');
+var db = monk('localhost:27017/nodetest1');
+
 var routes = require('./routes/index');
 
 var app = express();
@@ -40,6 +44,11 @@ function checkForRenditions(err) {
 
 setInterval(checkForRenditions, 1000);
 
+app.use(function(req,res,next){
+    req.db = db;
+    req.logger = logger;
+    next();
+});
 
 app.use('/', routes);
 
