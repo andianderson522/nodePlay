@@ -7,6 +7,15 @@ router.get('/ping', function(req, res) {
 	res.setHeader('Content-Type', 'application/json');
 	res.end(JSON.stringify({ pong: true}));
 });
+router.get('/put-cut', function(req, res) {
+	req.logger.info('in get');
+	var db = req.db;
+	var collection = db.get('imagePaths');
+	collection.find({},{},function(e,docs){
+		res.setHeader('Content-Type', 'application/json');
+        res.status(200).send(docs);
+    });
+});
 router.post('/put-cut', function(req, res) {
 	req.logger.info('in post');
 	req.logger.info(req.body.path);
@@ -23,7 +32,7 @@ router.post('/put-cut', function(req, res) {
 		"path" : req.body.path,
 		"width" : req.body.width,
 		"height" : req.body.height,
-		"data" : new Date()
+		"date" : new Date().getTime()
     }, function (err, doc) {
         if (err) {
             // If it failed, return error
