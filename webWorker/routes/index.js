@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var validator = require('../validators');
 
 /* GET home page. */
 router.get('/ping', function(req, res) {
@@ -10,7 +11,7 @@ router.post('/put-cut', function(req, res) {
 	req.logger.info('in post');
 	req.logger.info(req.body.path);
 	res.setHeader('Content-Type', 'application/json');
-	if (isEmpty(req.body)) {
+	if (validator.isEmpty(req.body)) {
 		res.end(JSON.stringify({ error: 'missing post body' }));
 	}
 	req.logger.info(req.body.width);
@@ -19,6 +20,7 @@ router.post('/put-cut', function(req, res) {
     res.end(JSON.stringify({ success: true }));
 });
 
+/*
 function isEmpty(obj) {
     // null and undefined are "empty"
     if (obj == null) return true;
@@ -37,5 +39,5 @@ function isEmpty(obj) {
  
     return true;
 }
-
+*/
 module.exports = router;
