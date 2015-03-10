@@ -10,13 +10,15 @@ var logger = new winston.Logger({
             json: true,
             maxsize: 5242880, //5MB
             maxFiles: 5,
-            colorize: false
+            colorize: false,
+            timestamp: true
         }),
         new winston.transports.Console({
             level: 'debug',
             handleExceptions: true,
             json: false,
-            colorize: true
+            colorize: true,
+            timestamp: true
         })
     ],
     exitOnError: false

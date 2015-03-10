@@ -24,6 +24,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+// MOVE FROM HERE TO A MODULE
+
 function checkForRenditions(err) {
     if (err) {
         logger.error('error: ' + err);
@@ -32,7 +35,11 @@ function checkForRenditions(err) {
     logger.info('checking for renditions to cut');
 }
 
+
+// TO HERE
+
 setInterval(checkForRenditions, 1000);
+
 
 app.use('/', routes);
 
