@@ -17,27 +17,25 @@ router.post('/put-cut', function(req, res) {
 	req.logger.info(req.body.width);
 	req.logger.info(req.body.height);
 	
+	var db = req.db;
+	var collection = db.get('imagePaths');
+	collection.insert({
+		"path" : req.body.path,
+		"width" : req.body.width,
+		"height" : req.body.height,
+		"data" : new Date()
+    }, function (err, doc) {
+        if (err) {
+            // If it failed, return error
+            req.logger.error("problem with db");
+            res.send("There was a problem adding the information to the database.");
+        } else {
+            // If it worked, set the header so the address bar doesn't still say /adduser
+            req.logger.info('data inserted');
+        }
+    });
     res.end(JSON.stringify({ success: true }));
 });
 
-/*
-function isEmpty(obj) {
-    // null and undefined are "empty"
-    if (obj == null) return true;
- 
-    // Assume if it has a length property with a non-zero value
-    // that that property is correct.
-    if (obj.length && obj.length > 0)    return false;
-    if (obj.length === 0)  return true;
- 
-    // Otherwise, does it have any properties of its own?
-    // Note that this doesn't handle
-    // toString and toValue enumeration bugs in IE < 9
-    for (var key in obj) {
-        if (hasOwnProperty.call(obj, key)) return false;
-    }
- 
-    return true;
-}
-*/
+
 module.exports = router;
