@@ -7,7 +7,7 @@ router.get('/ping', function(req, res) {
 	res.setHeader('Content-Type', 'application/json');
 	res.end(JSON.stringify({ pong: true}));
 });
-router.get('/put-cut', function(req, res) {
+router.get('/cutImage', function(req, res) {
 	req.logger.info('in get');
 	var db = req.db;
 	var collection = db.get('imagePaths');
@@ -16,23 +16,26 @@ router.get('/put-cut', function(req, res) {
         res.status(200).send(docs);
     });
 });
-router.post('/put-cut', function(req, res) {
-	req.logger.info('in post');
-	req.logger.info(req.body.path);
+router.post('/cutImage', function(req, res) {
+	var log = req.logger;
+	log.info('in post');
+	log.info(req.body.path);
 	res.setHeader('Content-Type', 'application/json');
 	if (validator.isEmpty(req.body)) {
 		res.end(JSON.stringify({ error: 'missing post body' }));
 	}
-	req.logger.info(req.body.width);
-	req.logger.info(req.body.height);
-	
+	log.info(req.body.width);
+	log.info(req.body.height);
+	log.info(req.body.replace);
+	var replace = (req.body.replace) ? true : false;
 	var db = req.db;
 	var collection = db.get('imagePaths');
 	collection.insert({
 		"path" : req.body.path,
 		"width" : req.body.width,
 		"height" : req.body.height,
-		"date" : new Date().getTime()
+		"date" : new Date().getTime(),
+		"replace" : replace
     }, function (err, doc) {
         if (err) {
             // If it failed, return error
