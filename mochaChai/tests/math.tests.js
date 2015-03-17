@@ -32,7 +32,9 @@ describe('divide', function(){
 describe('Foobar', function() {  
   describe('#sayHello()', function() {
     it('should work with assert', function() {
-      assert.equal(math.add(1,2), 3);
+    	result = math.add(1,2);
+      assert.equal(result, 3);
+      assert.isNumber(result);
     });
 
     it('should work with expect', function() {
