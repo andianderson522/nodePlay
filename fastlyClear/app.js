@@ -14,11 +14,14 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
-logger.debug('running in ' + config.mode);
+logger.warn('running in ' + config.mode);
+logger.debug('debug message');
+logger.info('info message');
+logger.warn('warn message');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
-logger.debug("Overriding 'Express' logger");
+logger.warn("Overriding 'Express' logger");
 app.use(require('morgan')('combined',{ "stream": logger.stream }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

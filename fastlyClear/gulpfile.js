@@ -3,7 +3,7 @@ var jshint = require('gulp-jshint');
 var mocha  = require('gulp-mocha');
 var istanbul = require('gulp-istanbul');
 
-var sourceDirs = ['routes/*.js', 'config/*.js', 'tests/**/*.js', 'app.js', 'gulpfile.js'];
+var sourceDirs = ['routes/*.js', 'config/*.js', 'app.js', 'gulpfile.js', 'logger/*.js'];
 
 function handleError(err) {
     console.log(err.message);
@@ -33,7 +33,9 @@ gulp.task('test', function() {
 });
 
 gulp.task('default', ['lint', 'test'], function() {
-  gulp.watch(sourceDirs, function() {
-    gulp.run('lint', 'test');
-  });
+    var watchFiles = sourceDirs.slice();
+    watchFiles.push('tests/**/*.js');
+    gulp.watch(watchFiles, function() {
+        gulp.run('lint', 'test');
+    });
 });

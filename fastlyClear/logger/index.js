@@ -1,10 +1,11 @@
 var winston = require('winston');
+var config = require('../config')();
 winston.emitErrs = true;
 
 var logger = new winston.Logger({
     transports: [
         new winston.transports.File({
-            level: 'info',
+            level: config.level,
             filename: './logs/all-logs.log',
             handleExceptions: true,
             json: true,
@@ -14,7 +15,7 @@ var logger = new winston.Logger({
             timestamp: true
         }),
         new winston.transports.Console({
-            level: 'debug',
+            level: config.level,
             handleExceptions: true,
             json: false,
             colorize: true,
