@@ -3,7 +3,7 @@ var jshint = require('gulp-jshint');
 var mocha  = require('gulp-mocha');
 var istanbul = require('gulp-istanbul');
 
-var sourceDirs = ['routes/*.js', 'config/*.js', 'app.js', 'gulpfile.js', 'logger/*.js'];
+var sourceDirs = ['routes/*.js', 'config/*.js', 'app.js', 'gulpfile.js', 'logger/*.js', 'controllers/*.js'];
 
 function handleError(err) {
     console.log(err.message);
