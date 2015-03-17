@@ -19,7 +19,7 @@ describe("Routes", function() {
   });
 });
 */
-
+/*
 describe('Routing', function() {
   var url = 'http://localhost:3000';
   before(function(done) {
@@ -45,3 +45,4 @@ describe('Routing', function() {
         });
     });
   });
+  */
