@@ -3,6 +3,8 @@ var jshint = require('gulp-jshint');
 var mocha  = require('gulp-mocha');
 var istanbul = require('gulp-istanbul');
 
+var sourceDirs = ['routes/*.js', 'config/*.js', 'tests/**/*.js', 'app.js', 'gulpfile.js'];
+
 function handleError(err) {
     console.log(err.message);
     this.emit('end');
@@ -10,14 +12,14 @@ function handleError(err) {
 
 gulp.task('lint', function() {
   return gulp
-    .src(['gulpfile.js', 'app.js', 'routes/*.js', 'tests/**/*.js'])
+    .src(sourceDirs)
     .pipe(jshint())
     .pipe(jshint.reporter('default'));
 });
 
 gulp.task('test', function() {
   return gulp
-    .src(['routes/**/*.js', 'app.js'],{require:'spec/helpers/chai.js'})
+    .src(sourceDirs)
     .pipe(istanbul()) // Covering files
     .pipe(istanbul.hookRequire()) // Force `require` to return covered files
     .on('finish', function () {
@@ -31,7 +33,7 @@ gulp.task('test', function() {
 });
 
 gulp.task('default', ['lint', 'test'], function() {
-  gulp.watch(['lib/*.js', 'tests/**/*.js'], function() {
+  gulp.watch(sourceDirs, function() {
     gulp.run('lint', 'test');
   });
 });
