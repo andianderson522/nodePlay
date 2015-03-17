@@ -2,7 +2,26 @@ body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
-
 a {
-  color: #00B7FF;
+  color: blue;
+}
+a:link {
+    text-decoration: none;
+}
+
+a:visited {
+	color: purple;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a:active {
+    text-decoration: underline;
+}
+nav {
+	font-weight: 800;
+	text-decoration: none;
 }
