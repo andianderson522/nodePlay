@@ -1,6 +1,6 @@
 module.exports.isNullOrEmpty = function(obj) {
     // null and undefined are "empty"
-    if (obj === null) {
+    if (obj == null) { // jshint ignore:line
         return true;
     }
     // Assume if it has a length property with a non-zero value

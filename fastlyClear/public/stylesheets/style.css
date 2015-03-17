@@ -25,3 +25,7 @@ nav {
 	font-weight: 800;
 	text-decoration: none;
 }
+.error {
+	color: red;
+	font-weight: 800;
+}
