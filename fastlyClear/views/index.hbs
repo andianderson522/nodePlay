@@ -4,16 +4,18 @@
 <table border="1">
 	{{#if error}}
 	<tr>
-		<td colspan="3" class="error">{{error}}</td>
+		<td colspan="2" class="error">{{error}}</td>
 	</tr>
 	{{/if}}
 	<tr>
 		<td>label</td>
 		<td>input</td>
-		<td>validation message</td>
-		<td>
 	</tr>
 	<tr>
-		<td colspan="3"><input type="reset" value="Reset" /><input type="submit" value="Go" style="float:right;"/></td>
+		<td class="label">URLs (comma seperated)</td>
+		<td><textarea name="URLs" cols="100" placeholder="http://www.style.com" required rows="5" wrap="soft"></textarea></td>
+	</tr>
+	<tr>
+		<td colspan="2"><input type="reset" value="Reset" /><input type="submit" value="Go" style="float:right;"/></td>
 	</tr>
 </form>
