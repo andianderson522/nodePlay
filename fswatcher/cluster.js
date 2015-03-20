@@ -9,14 +9,6 @@ if (cluster.isMaster) {
 		var child = cluster.fork();
 		child.on('exit', function (worker, code, signal) {
 			console.log(child.process.pid + ' died');
-			workers.forEach(function(element, index, array){
-				// console.log(workers[index]);
-				if (workers[index].process.pid == child.process.pid) {
-					console.log('removing worker: ' + child.process.pid);
-					workers.splice(index,1);
-				}
-				console.log(workers.length);
-			}); 
 			//logging details about what happend
 			if (restart) {
 				child = cluster.fork();
@@ -39,6 +31,7 @@ if (cluster.isMaster) {
 } else {
 	console.log("Child process "+process.pid+" being created and listening to port 1337");
 	http.createServer(function(req, res){
+		console.log(process.pid + ' got a request');
 		res.end("Hello World " + process.pid);
 	}).listen(1337);
 }
