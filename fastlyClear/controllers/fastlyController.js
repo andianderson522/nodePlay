@@ -5,16 +5,29 @@ exports.prepare = function() {
 	return body;
 };
 exports.process = function(body) {
-	// NEED TO PUT BACK PASSED IN FIELDS ON VALIDATiON ERRORS
+	log.debug('body: ' + JSON.stringify(body));
 	result = {};
-	log.debug('got post body: ' + JSON.stringify(body));
 	validator = require('../validators');
 	errorTitle = 'Fastly Clear Form Errors';
 	if (validator.isNullOrEmpty(body)) {
-		return {error: 'missing post body', title: errorTitle};
+		log.debug('body is not valid');
+		result.error = 'missing post body';
+		result.title = errorTitle;
+		return result;
 	}	
-	if (validator.isNullOrEmpty(body.URLs)) {
-		return {error: 'missing URLS to clear', title: errorTitle};
+	if (validator.isNullOrEmpty(body.URL)) {
+		log.debug('body.URL is not valid');
+		result.error = 'missing URL to clear';
+		result.title = errorTitle;
+		return result;
 	}
+	if (validator.isNullOrEmpty(body.key)) {
+		log.debug('body.key is not valid');
+		result.error = 'missing key';
+		result.title = errorTitle;
+		return result;
+	}
+	log.debug('No validation errors');
+	result.title = "Fastly Clear Success";
 	return result;
 };
