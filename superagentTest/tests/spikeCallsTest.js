@@ -1,14 +1,15 @@
 var superagent = require('superagent');
-var config = require('../config');
-var log = require('../logger')
+var config = require('../config')();
+var log = require('../logger');
 var chai = require('chai'),
     expect = chai.expect,
     should = chai.should();
 
 describe("Calls to User service cds:", function(){
+    log.info(config.baseUrl);
     var goodHeader = {
         'key': 'myEndUserKey',
-        'Origin': 'http://dev-user-service.condenastdigital.com',
+        'Origin': config.baseUrl,
         'Accept':'application/json'
     };
 
@@ -97,7 +98,7 @@ describe("Calls to User service cds:", function(){
                 expect(res.data).to.not.exist;
                 expect(res.text).to.exist;
                 expect(res.body).to.exist;
-                log.debug(res.body);
+                log.info(res.body);
                 var subResponse = res.body.cdsSubscriptionsResponse;
                 expect(subResponse).to.exist;
                 expect(subResponse.userErrors).to.be.empty;
@@ -105,7 +106,7 @@ describe("Calls to User service cds:", function(){
                 expect(subscriptions).to.exist;
                 var subscription = subscriptions.cdsSubscription;
                 expect(subscription).to.exist;
-                log.debug(subscription);
+                log.info(subscription);
                 expect(subscription['@adminErrors']).to.eql('false');
                 expect(subscription['@cdsOfferId']).to.eql('4745');
                 expect(subscription['@success']).to.equal('true');

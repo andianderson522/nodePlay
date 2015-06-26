@@ -1,8 +1,9 @@
 var chai = require('chai'),
 	assert = chai.assert,
 	sinon = require('sinon');
+var config = require('../../config')();
 
-describe("Configuration setup", function() {
+describe("Logging setup", function() {
 	 before(function () {
         logger = require('../../logger');
     });
@@ -12,8 +13,8 @@ describe("Configuration setup", function() {
 		assert.isNotNull(transports);
 		file = transports.file;
 		assert.isNotNull(file);
-		assert.equal(file.level, 'debug');
-		assert.equal(transports.console.level, 'debug');
+		assert.equal(file.level, config.level);
+		assert.equal(transports.console.level, config.level);
 	});
 });
 describe('stream function', function() {

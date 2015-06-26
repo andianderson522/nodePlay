@@ -2,6 +2,7 @@ var gulp   = require('gulp');
 var jshint = require('gulp-jshint');
 var mocha  = require('gulp-mocha');
 var istanbul = require('gulp-istanbul');
+var util = require('gulp-util');
 
 var sourceDirs = ['config/*.js', 'app.js', 'gulpfile.js', 'logger/*.js' ];
 
@@ -19,7 +20,7 @@ gulp.task('lint', function() {
 
 gulp.task('test', function() {
   return gulp
-    .src(sourceDirs)
+    .src(sourceDirs, util.env)
     .pipe(istanbul()) // Covering files
     .pipe(istanbul.hookRequire()) // Force `require` to return covered files
     .on('finish', function () {
@@ -33,9 +34,9 @@ gulp.task('test', function() {
 });
 
 gulp.task('default', ['lint', 'test'], function() {
-    var watchFiles = sourceDirs.slice();
-    watchFiles.push('tests/**/*.js');
-    gulp.watch(watchFiles, function() {
+    //var watchFiles = sourceDirs.slice();
+    //watchFiles.push('tests/**/*.js');
+    //gulp.watch(watchFiles, function() {
         gulp.run('lint', 'test');
-    });
+    //});
 });
