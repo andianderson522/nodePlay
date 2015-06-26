@@ -40,3 +40,11 @@ gulp.task('default', ['lint', 'test'], function() {
         gulp.run('lint', 'test');
     //});
 });
+
+gulp.task('watch', function(){
+    var watchFiles = sourceDirs.slice();
+    watchFiles.push('tests/**/*.js');
+    gulp.watch(watchFiles, function() {
+        gulp.run('lint', 'test');
+    });
+});

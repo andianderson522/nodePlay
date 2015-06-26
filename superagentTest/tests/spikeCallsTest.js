@@ -6,6 +6,7 @@ var chai = require('chai'),
     should = chai.should();
 
 describe('Calls to User service /open/cds/entries:', function(){
+    log.info('running tests against environment: ' + config.mode);
     log.info(config.baseUrl);
     var path = '/open/cds/entries';
     var type = 'application/json';
@@ -128,7 +129,7 @@ describe('Calls to User service /open/cds/entries:', function(){
                 expect(res.data).to.not.exist;
                 expect(res.text).to.exist;
                 expect(res.body).to.exist;
-                log.info(res.body);
+                log.debug(res.body);
                 var subResponse = res.body.cdsSubscriptionsResponse;
                 expect(subResponse).to.exist;
                 expect(subResponse.userErrors).to.be.empty;
@@ -136,11 +137,155 @@ describe('Calls to User service /open/cds/entries:', function(){
                 expect(subscriptions).to.exist;
                 var subscription = subscriptions.cdsSubscription;
                 expect(subscription).to.exist;
-                log.info(subscription);
+                log.debug(subscription);
                 expect(subscription['@adminErrors']).to.eql('false');
                 expect(subscription['@cdsOfferId']).to.eql('4745');
                 expect(subscription['@success']).to.equal('true');
                 expect(subscription['@userErrors']).to.equal('false');
+                done();
+        });
+    });
+
+    it('Credit cards orders are not supported', function(done){
+        var requestBody = {
+            'cdsSubscriptionsRequest':{
+                'cdsSubscriptions':{
+                    'cdsSubscription':{
+                        '@subscribed':'true',
+                        '@cdsOfferId':'4745'
+                    }
+                },
+                'creditCard':{
+                    '@paymentTypeCode':'2',
+                    '@expirationYear':'2012',
+                    '@expirationMonth':'12',
+                    '@creditCardNumber':'4111111111111111'
+                },
+                'userEntry':{
+                    '@zipCode':'19355',
+                    '@stateCode':'PA',
+                    '@lastName':'lastName',
+                    '@firstName':'firstName',
+                    '@email':'test@test.com',
+                    '@countryCode':'US',
+                    '@city':'frazer',
+                    '@address2':'address2',
+                    '@address1':'address1',
+                    'entryContext':{
+                        '@siteCode':'SLF',
+                        '@formName':'TEST',
+                        '@application':'CDS',
+                        '@amgUserId':'900181789'
+                    }
+                }
+            }
+        };
+        superagent.post(config.baseUrl + path)
+            .send(requestBody)
+	        .type(type)
+            .set(goodHeader)
+            .end(function(err, res){
+                expect(err).to.exist;
+                expect(err.status).to.equal(470);
+                expect(res).to.exist;
+                expect(res.body).to.exist;
+                expect(res.body).to.not.be.empty;
+                var subResponse = res.body.cdsSubscriptionsResponse;
+                expect(subResponse).to.exist;
+                expect(subResponse.cdsSubscriptions).to.exist;
+                expect(subResponse.cdsSubscriptions).to.be.empty;
+                expect(subResponse.userErrors).to.exist;
+                expect(subResponse.userErrors).to.be.empty;
+                done();
+            });
+    });
+
+    it('cdsOfferId is not good but we get success from cds', function(done) {
+        var requestBody = {
+            'cdsSubscriptionsRequest':{
+                'cdsSubscriptions':{
+                    'cdsSubscription':{
+                        '@subscribed':'true',
+                        '@cdsOfferId':'2943'
+                    }
+                },
+                'userEntry':{
+                    '@zipCode':'19355',
+                    '@stateCode':'PA',
+                    '@lastName':'lastName',
+                    '@firstName':'firstName',
+                    '@email':'test@test.com',
+                    '@countryCode':'US',
+                    '@city':'frazer',
+                    '@address2':'address2',
+                    '@address1':'address1',
+                    'entryContext':{
+                        '@siteCode':'SLF',
+                        '@formName':'TEST',
+                        '@application':'CDS',
+                        '@amgUserId':'900181789'
+                    }
+                }
+            }
+        };
+        superagent.post(config.baseUrl + path)
+            .send(requestBody)
+            .type(type)
+            .set(goodHeader)
+            .end(function(err, res){
+                expect(err).to.not.exist;
+                expect(res).to.exist;
+                expect(res.status).to.equal(201);
+                log.debug(res.body);
+                var subResponse = res.body.cdsSubscriptionsResponse;
+                expect(subResponse).to.exist;
+                log.debug(subResponse);
+                expect(subResponse.userErrors).to.be.empty;
+                var subscriptions = subResponse.cdsSubscriptions;
+                expect(subscriptions).to.exist;
+                var subscription = subscriptions.cdsSubscription;
+                expect(subscription).to.exist;
+                expect(subscription['@adminErrors']).to.equal('false');
+                expect(subscription['@success']).to.equal('true');
+                expect(subscription['@userErrors']).to.equal('false');
+                done();
+        });
+    });
+
+    it('validation errors', function(done){
+        var requestBody = {
+            'cdsSubscriptionsRequest':{
+                'cdsSubscriptions':{
+                    'cdsSubscription':{
+                        '@subscribed':'true',
+                        '@cdsOfferId':'4745'
+                    }
+                },
+                'userEntry':{
+                    'entryContext':{
+                        '@siteCode':'SLF',
+                        '@formName':'TEST',
+                        '@application':'CDS',
+                        '@amgUserId':'900181789'
+                    }
+                }
+            }
+        };
+        superagent.post(config.baseUrl + path)
+            .send(requestBody)
+            .type(type)
+            .set(goodHeader)
+            .end(function(err, res){
+                expect(err).to.exist;
+                expect(err.status).to.equal(470);
+                expect(res).to.exist;
+                expect(res.status).to.equal(470);
+                log.debug(JSON.stringify(res.body));
+                var subResponse = res.body.cdsSubscriptionsResponse;
+                expect(subResponse).to.exist;
+                log.debug(subResponse);
+                expect(subResponse.userErrors).to.not.be.empty;
+                expect(subResponse.userErrors.userError).to.not.be.empty;
                 done();
         });
     });
