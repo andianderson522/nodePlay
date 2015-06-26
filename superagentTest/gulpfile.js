@@ -26,7 +26,7 @@ gulp.task('test', function() {
     .on('finish', function () {
         gulp.src(['tests/**/*.js'])
             .pipe(mocha({reporter: 'nyan', timeout: 5000}))
-            .pipe(istanbul.writeReports()) // Creating the reports after tests runned
+        //    .pipe(istanbul.writeReports()) // Creating the reports after tests runned
             .on('end', function() {
                 console.log('ended');
             });

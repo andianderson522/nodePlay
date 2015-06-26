@@ -5,8 +5,10 @@ var chai = require('chai'),
     expect = chai.expect,
     should = chai.should();
 
-describe("Calls to User service cds:", function(){
+describe('Calls to User service /open/cds/entries:', function(){
     log.info(config.baseUrl);
+    var path = '/open/cds/entries';
+    var type = 'application/json';
     var goodHeader = {
         'key': 'myEndUserKey',
         'Origin': config.baseUrl,
@@ -22,10 +24,10 @@ describe("Calls to User service cds:", function(){
 				expect(res.status).to.eql(200);
         		done();
 		});
-  });
+    });
 
 	it('get not supported', function(done){
-		superagent.get('http://dev-user-service.condenastdigital.com/open/cds/entries')
+		superagent.get(config.baseUrl + path)
 			.send({})
             .set('Accept','application/xml')
 			.end(function(err, res){
@@ -37,7 +39,7 @@ describe("Calls to User service cds:", function(){
 	});
 
     it('post without correct headers fails', function(done){
-        superagent.post('http://dev-user-service.condenastdigital.com/open/cds/entries')
+        superagent.post(config.baseUrl + path)
             .send({})
             .set('Accept','application/xml')
             .end(function(err, res){
@@ -53,9 +55,9 @@ describe("Calls to User service cds:", function(){
     });
 
     it('post with key only fails', function(done){
-        superagent.post('http://dev-user-service.condenastdigital.com/open/cds/entries')
+        superagent.post(config.baseUrl + path)
             .send({})
-            .set('Accept','application/xml')
+            .set('Accept',type)
             .set('key', 'myEndUserKey')
             .end(function(err, res){
                 expect(err).to.exist;
@@ -64,33 +66,61 @@ describe("Calls to User service cds:", function(){
                 expect(res.serverError).to.be.true;
                 expect(res.error.status).to.eql(500);
                 expect(res.error.toString()).to.eql('Error: cannot POST /open/cds/entries (500)');
-                expect(res.body).to.eql({});
+                expect(res.body).to.eql({restError:''});
                 done();
         });
     });
 
     it('post with just headers fails', function(done){
-        superagent.post('http://dev-user-service.condenastdigital.com/open/cds/entries')
+        superagent.post(config.baseUrl + path)
             .send({})
             .set('key', 'myEndUserKey')
-	        .set('Origin', 'http://stag-user-service.condenastdigital.com/open/cds/entries')
-            .set('Accept','application/xml')
+	        .set('Origin', config.baseUrl)
+            .set('Accept',type)
             .end(function(err, res){
                 expect(err).to.exist;
-                expect(err.status).to.eql(401);
-                expect(res.status).to.eql(401);
-                expect(res.clientError).to.be.true;
-                expect(res.error.status).to.eql(401);
-                expect(res.error.toString()).to.eql('Error: cannot POST /open/cds/entries (401)');
-                expect(res.body).to.eql({});
+                expect(err.status).to.eql(500);
+                expect(res.status).to.eql(500);
+                expect(res.clientError).to.be.false;
+                expect(res.serverError).to.be.true;
+                expect(res.error.status).to.eql(500);
+                expect(res.error.toString()).to.eql('Error: cannot POST /open/cds/entries (500)');
+                expect(res.body).to.eql({restError:''});
                 done();
         });
     });
 
     it('good post', function(done){
-        superagent.post('http://dev-user-service.condenastdigital.com/open/cds/entries')
-            .send({"cdsSubscriptionsRequest":{"cdsSubscriptions":{"cdsSubscription":{"@subscribed":"true","@cdsOfferId":"4745"}},"userEntry":{"@zipCode":"19355","@stateCode":"PA","@lastName":"lastName","@firstName":"firstName","@email":"test@test.com","@countryCode":"US","@city":"frazer","@address2":"address2","@address1":"address1","entryContext":{"@siteCode":"SLF","@formName":"TEST","@application":"CDS","@amgUserId":"900181789"}}}})
-	        .type('application/json')
+        var requestBody = {
+            cdsSubscriptionsRequest: {
+                cdsSubscriptions:{
+                    cdsSubscription:{
+                        '@subscribed':true,
+                        '@cdsOfferId':4745
+                    }
+                },
+                userEntry:{
+                    '@zipCode':19355,
+                    '@stateCode':'PA',
+                    '@lastName':'lastName',
+                    '@firstName':'firstName',
+                    '@email':'test@test.com',
+                    '@countryCode':'US',
+                    '@city':'frazer',
+                    '@address2':'address2',
+                    '@address1':'address1',
+                    entryContext:{
+                        '@siteCode':'SLF',
+                        '@formName':'TEST',
+                        '@application':'CDS',
+                        '@amgUserId':'900181789'
+                    }
+                }
+            }
+        };
+        superagent.post(config.baseUrl + path)
+            .send(requestBody)
+	        .type(type)
             .set(goodHeader)
             .end(function(err, res){
                 expect(err).to.not.exist;

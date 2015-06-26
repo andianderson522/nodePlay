@@ -30,9 +30,4 @@ describe("Configuration setup", function() {
 		assert.equal(config.baseUrl, 'http://dev-user-service.condenastdigital.com');
         next();
     });
-	//it('should default to ci Configuration', function(next){
-	//	var config = require('../../config')();
-	//	assert.equal(config.mode, 'ci');
-	//	next();
-	//});
 });
