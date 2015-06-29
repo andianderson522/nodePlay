@@ -2,8 +2,7 @@ var superagent = require('superagent');
 var config = require('../config')();
 var log = require('../logger');
 var chai = require('chai'),
-    expect = chai.expect,
-    should = chai.should();
+    expect = chai.expect;
 
 describe('Calls to User service /open/cds/entries:', function(){
     log.info('running tests against environment: ' + config.mode);
@@ -14,6 +13,7 @@ describe('Calls to User service /open/cds/entries:', function(){
         'key': 'myEndUserKey',
         'Origin': config.baseUrl,
         'Accept':'application/json'
+        
     };
 
 	it('can successfully make an http call', function(done) {

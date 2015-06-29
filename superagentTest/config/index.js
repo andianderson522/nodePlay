@@ -12,12 +12,12 @@ var config = {
     staging: {
         mode: 'staging',
         level: 'info',
-        baseUrl: 'http://stag-user-service.condenastdigital.com'
+        baseUrl: 'https://stag-user-service.condenastdigital.com'
     },
     production: {
         mode: 'production',
         level: 'warn',
-        baseUrl: 'http://user-service.condenastdigital.com'
+        baseUrl: 'https://user-service.condenastdigital.com'
     }
 };
 module.exports = function(mode) {

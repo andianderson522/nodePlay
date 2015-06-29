@@ -17,7 +17,9 @@
     "gulp-mocha": "^2.0.0",
     "mocha": "^2.2.1",
     "mocha-istanbul": "^0.2.0",
+    "oauth": "^0.9.13",
     "sinon": "^1.14.1",
-    "superagent": "1.2.0"
+    "superagent": "1.2.0",
+    "superagent-oauth": "^0.2.3"
   }
 }

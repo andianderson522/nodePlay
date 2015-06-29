@@ -13,14 +13,14 @@ describe("Configuration setup", function() {
         var config = require('../../config')('staging');
         assert.equal(config.mode, 'staging');
         assert.equal(config.level, 'info');
-		assert.equal(config.baseUrl, 'http://stag-user-service.condenastdigital.com');
+		assert.equal(config.baseUrl, 'https://stag-user-service.condenastdigital.com');
         next();
     });
     it("should load production configurations", function(next) {
         var config = require('../../config')('production');
         assert.equal(config.mode, 'production');
         assert.equal(config.level, 'warn');
-		assert.equal(config.baseUrl, 'http://user-service.condenastdigital.com');
+		assert.equal(config.baseUrl, 'https://user-service.condenastdigital.com');
         next();
     });
 	it("should load ci configurations", function(next) {
