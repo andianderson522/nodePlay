@@ -11,6 +11,7 @@ describe('Calls to Oauth version of CDS', function() {
     var path = '/cds/entries';
     var type = 'application/json';
     var oauth;
+    var requestBody;
     var goodHeader = {
         'Accept':'application/json',
         'User-Agent':'Mozilla/5.0 (X11; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/12.0'
@@ -25,6 +26,33 @@ describe('Calls to Oauth version of CDS', function() {
             null,
             'PLAINTEXT'
         );
+        requestBody = {
+            cdsSubscriptionsRequest: {
+                cdsSubscriptions:{
+                    cdsSubscription:{
+                        '@subscribed':true,
+                        '@cdsOfferId':4745
+                    }
+                },
+                userEntry:{
+                    '@zipCode':19355,
+                    '@stateCode':'PA',
+                    '@lastName':'lastName',
+                    '@firstName':'firstName',
+                    '@email':'test@test.com',
+                    '@countryCode':'US',
+                    '@city':'frazer',
+                    '@address2':'address2',
+                    '@address1':'address1',
+                    entryContext:{
+                        '@siteCode':'SLF',
+                        '@formName':'TEST',
+                        '@application':'CDS',
+                        '@amgUserId':'900181789'
+                    }
+                }
+            }
+        };
     });
 
     it('call with no body should error', function(done) {
@@ -41,33 +69,6 @@ describe('Calls to Oauth version of CDS', function() {
     });
 
     it('get should error', function(done) {
-        var requestBody = {
-            cdsSubscriptionsRequest: {
-                cdsSubscriptions:{
-                    cdsSubscription:{
-                        '@subscribed':true,
-                        '@cdsOfferId':4745
-                    }
-                },
-                userEntry:{
-                    '@zipCode':19355,
-                    '@stateCode':'PA',
-                    '@lastName':'lastName',
-                    '@firstName':'firstName',
-                    '@email':'test@test.com',
-                    '@countryCode':'US',
-                    '@city':'frazer',
-                    '@address2':'address2',
-                    '@address1':'address1',
-                    entryContext:{
-                        '@siteCode':'SLF',
-                        '@formName':'TEST',
-                        '@application':'CDS',
-                        '@amgUserId':'900181789'
-                    }
-                }
-            }
-        };
         request.get(config.baseUrl + path)
         .send(requestBody)
         .sign(oauth, '','')
@@ -81,33 +82,6 @@ describe('Calls to Oauth version of CDS', function() {
     });
 
     it('Successfully subscribe', function(done){
-        var requestBody = {
-            cdsSubscriptionsRequest: {
-                cdsSubscriptions:{
-                    cdsSubscription:{
-                        '@subscribed':true,
-                        '@cdsOfferId':4745
-                    }
-                },
-                userEntry:{
-                    '@zipCode':19355,
-                    '@stateCode':'PA',
-                    '@lastName':'lastName',
-                    '@firstName':'firstName',
-                    '@email':'test@test.com',
-                    '@countryCode':'US',
-                    '@city':'frazer',
-                    '@address2':'address2',
-                    '@address1':'address1',
-                    entryContext:{
-                        '@siteCode':'SLF',
-                        '@formName':'TEST',
-                        '@application':'CDS',
-                        '@amgUserId':'900181789'
-                    }
-                }
-            }
-        };
         request.post(config.baseUrl + path)
             .sign(oauth, '','')
             .send(requestBody)
@@ -131,6 +105,35 @@ describe('Calls to Oauth version of CDS', function() {
                 expect(subscription['@success']).to.equal('true');
                 expect(subscription['@userErrors']).to.equal('false');
                 done();
+        });
+    });
+
+    it('spike CNID style call', function(done){
+        var req = require('request');
+        var opts = {
+            agent: false,
+            headers: {'Accept': 'application/json', "Content-type": "application/json",'User-Agent':'Mozilla/5.0 (X11; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/12.0'},
+	        "oauth": {
+               "consumer_key": "myKeyInternal",
+               "consumer_secret": "mySecretInternal"
+            },
+            agentOptions: {
+               secureOptions: require('constants').SSL_OP_NO_TLSv1_2,
+               ciphers: 'ECDHE-RSA-AES256-SHA:AES256-SHA:RC4-SHA:RC4:HIGH:!MD5:!aNULL:!EDH:!AESGCM',
+               honorCipherOrder: true
+           },
+           body: JSON.stringify(requestBody),
+           json: true
+        };
+        request.post(config.baseUrl + path, opts, function(err, response, raw){
+            expect(err).to.not.exist;
+            expect(response).to.exist;
+            log.warn(raw);
+            log.error("request: " + response.req.toString());
+            // just make it pass for now
+            expect(response.status).to.equal(200);
+            log.error(err);
+            done();
         });
     });
 
