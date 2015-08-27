@@ -7,7 +7,7 @@ exports.register = function(server, options, next) {
             method: 'GET',
             path: '/tasks',
             handler: function (request, reply) {
-				reply(tasks);
+				reply(JSON.stringify(tasks));
             }
         },
         {
@@ -20,9 +20,20 @@ exports.register = function(server, options, next) {
                 var key = tasks.push(task);
                 reply({key: key - 1, task: task});
             }
-        }
+        },
+		{
+			method: 'GET',
+			path: '/json',
+			handler: function (request, reply) {
+				var obj = {
+					name:'someName',
+					date: 12345,
+					street: '123 sesame street'
+				};
+				reply(obj);
+			}
+		}
     ]);
-
     // Callback, completes the registration process
     next();
 };

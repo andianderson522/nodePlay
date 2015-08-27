@@ -9,13 +9,17 @@ server.connection({
 
 // Declare plugins
 var plugins = [
-    { register: require('./routes/tasks.js') }
+    {
+        register: require('./routes/tasks.js'),
+        register: require('./routes/user.js')
+    }
 ];
 
 // Register plugins, and start the server if none of them fail
 server.register(plugins, function (err) {
-    if (err) { throw err; }
-
+    if (err) {
+        throw err;
+    }
     server.start(function () {
         server.log('info', 'Server running at: ' + server.info.uri);
     });
